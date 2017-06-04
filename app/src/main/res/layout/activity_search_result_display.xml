@@ -10,19 +10,35 @@
         android:id="@+id/movie_picture"
         android:layout_width="368dp"
         android:layout_height="125dp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="parent"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="-481dp"
 
-        />
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="parent" />
 
     <TextView
         android:id="@+id/title_display"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Bonjour"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+
+
+        android:layout_marginTop="41dp"
+        android:text="Titre"
+        app:layout_constraintHorizontal_bias="0.501"
         app:layout_constraintLeft_toLeftOf="parent"
-
-
+        app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/movie_picture" />
+
+    <TextView
+        android:id="@+id/overview"
+        android:layout_width="340dp"
+        android:layout_height="495dp"
+        android:layout_marginLeft="22dp"
+        android:layout_marginTop="47dp"
+        android:paddingTop="25dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/title_display" />
 
 </android.support.constraint.ConstraintLayout>
