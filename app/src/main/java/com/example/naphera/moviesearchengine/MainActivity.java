@@ -1,15 +1,18 @@
 package com.example.naphera.moviesearchengine;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -25,7 +28,9 @@ import org.json.JSONObject;
 import org.json.JSONTokener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -33,7 +38,8 @@ public class MainActivity extends AppCompatActivity {
     Toast toast;
 
     Spinner numberOfResultSpinner;
-    List<String> moviesResults = new ArrayList<String>();
+    List<String> moviesResultsTitle = new ArrayList<>();
+    List<Integer> moviesResultsId = new ArrayList<>();
 
 
     @Override
@@ -48,7 +54,6 @@ public class MainActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        //final TextView mTextView = (TextView) findViewById(R.id.text1);
 
         spinnerInit();
 
@@ -56,8 +61,8 @@ public class MainActivity extends AppCompatActivity {
 
         final RequestQueue queue = Volley.newRequestQueue(this);
 
-        Button b = (Button) findViewById(R.id.buttonSearch);
-        b.setOnClickListener(new View.OnClickListener() {
+        Button buttonSearch = (Button) findViewById(R.id.buttonSearch);
+        buttonSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 EditText searchField = (EditText) findViewById(R.id.searchField);
@@ -70,18 +75,35 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        final Intent toResultDisplay = new Intent(MainActivity.this, SearchResultDisplay.class );
+        ListView listResults = (ListView) findViewById(R.id.listResults);
+
+        listResults.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                // selected item
+                int selectedMovieId = moviesResultsId.get(position);
+                toResultDisplay.putExtra("movieId", selectedMovieId);
+                startActivity(toResultDisplay);
+
+
+                Toast toast = Toast.makeText(getApplicationContext(), selectedMovieId, Toast.LENGTH_SHORT);
+                toast.show();
+            }
+        });
+
 
     }
 
     public void spinnerInit(){
         numberOfResultSpinner = (Spinner) findViewById(R.id.spinner);
-        Integer[] list = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 20};
+        Integer[] list = {1, 2 , 3, 4, 5, 6, 7, 8, 9, 10, 20};
         ArrayAdapter<Integer> aa = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, list);
         numberOfResultSpinner.setAdapter(aa);
     }
 
-    public void setResultInList(List l){
-        ArrayAdapter aa = new ArrayAdapter(this, android.R.layout.simple_list_item_1, l);
+    public void setResultInList(List<String> listMovie){
+        ArrayAdapter<String> aa = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1,listMovie);
         ListView lv = (ListView) findViewById(R.id.listResults);
         lv.setAdapter(aa);
     }
@@ -95,19 +117,22 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(String response) {
                         try {
-                            moviesResults = new ArrayList<>();
+                            moviesResultsTitle = new ArrayList<>();
+                            moviesResultsId = new ArrayList<>();
+
                             JSONObject repObj =
                                     (JSONObject) new JSONTokener(response).nextValue();
 
                             JSONArray movies = repObj.getJSONArray("results");
-                            addResultToList : for (int i=0; i< movies.length();i++) {
+                            for (int i=0; i< movies.length();i++) {
                                 JSONObject val = movies.getJSONObject(i);
-                                moviesResults.add(val.getString("title"));
+                                moviesResultsTitle.add(val.getString("title"));
+                                moviesResultsId.add(val.getInt("id"));
                                 if(i == numberOfResult){
-                                    break addResultToList;
+                                    break;
                                 }
                             }
-                            setResultInList(moviesResults);
+                            setResultInList(moviesResultsTitle);
                         } catch (JSONException je) {
                             je.printStackTrace();
                         }
