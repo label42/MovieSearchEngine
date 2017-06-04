@@ -85,10 +85,6 @@ public class MainActivity extends AppCompatActivity {
                 int selectedMovieId = moviesResultsId.get(position);
                 toResultDisplay.putExtra("movieId", selectedMovieId);
                 startActivity(toResultDisplay);
-
-
-                Toast toast = Toast.makeText(getApplicationContext(), selectedMovieId, Toast.LENGTH_SHORT);
-                toast.show();
             }
         });
 
@@ -128,7 +124,7 @@ public class MainActivity extends AppCompatActivity {
                                 JSONObject val = movies.getJSONObject(i);
                                 moviesResultsTitle.add(val.getString("title"));
                                 moviesResultsId.add(val.getInt("id"));
-                                if(i == numberOfResult){
+                                if(i == numberOfResult - 1){
                                     break;
                                 }
                             }
