@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Movie Search Engine</string>
+    <string name="searchButtonText">Recherche</string>
 </resources>

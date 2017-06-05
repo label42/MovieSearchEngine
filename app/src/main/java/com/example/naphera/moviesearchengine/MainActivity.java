@@ -13,7 +13,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -29,9 +28,7 @@ import org.json.JSONObject;
 import org.json.JSONTokener;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -106,8 +103,8 @@ public class MainActivity extends AppCompatActivity {
 
     public void spinnerInit(){
         numberOfResultSpinner = (Spinner) findViewById(R.id.spinner);
-        Integer[] list = {1, 2 , 3, 4, 5, 6, 7, 8, 9, 10, 20};
-        ArrayAdapter<Integer> aa = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, list);
+        Integer[] listAskedResult = {1, 2 , 3, 4, 5, 6, 7, 8, 9, 10, 20};
+        ArrayAdapter<Integer> aa = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, listAskedResult);
         numberOfResultSpinner.setAdapter(aa);
     }
 
@@ -118,7 +115,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public StringRequest generateRequest(String film, final int numberOfResult){
-        String url ="https://api.themoviedb.org/3/search/movie?api_key=9983b4ca4a856d37618c2d4a52e4a031&language=en-US&page=1&include_adult=false&query="+film;
+        String url ="https://api.themoviedb.org/3/search/movie?api_key=9983b4ca4a856d37618c2d4a52e4a031&language=fr-FR&page=1&include_adult=false&query="+film;
 
         // Request a string response from the provided URL.
         return new StringRequest(Request.Method.GET, url,
