@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -61,17 +62,29 @@ public class MainActivity extends AppCompatActivity {
 
         final RequestQueue queue = Volley.newRequestQueue(this);
 
-        Button buttonSearch = (Button) findViewById(R.id.buttonSearch);
+        final Button buttonSearch = (Button) findViewById(R.id.buttonSearch);
+        final EditText searchField = (EditText) findViewById(R.id.searchField);
         buttonSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                EditText searchField = (EditText) findViewById(R.id.searchField);
+
                 String film= searchField.getText().toString().replace(' ', '+');
                 System.out.print(film);
                 int numberOfResult = Integer.valueOf(String.valueOf(numberOfResultSpinner.getSelectedItem()));
                 StringRequest stringRequest = generateRequest(film, numberOfResult);
                 queue.add(stringRequest);
 
+            }
+        });
+
+        searchField.setOnKeyListener(new View.OnKeyListener() {
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                // TODO Auto-generated method stub
+                if (keyCode == KeyEvent.KEYCODE_ENTER) { //Whenever you got user click enter. Get text in edittext and check it equal test1. If it's true do your code in listenerevent of button3
+                    buttonSearch.performClick();
+                    return true;
+                }
+                return false;
             }
         });
 

@@ -2,6 +2,7 @@ package com.example.naphera.moviesearchengine;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.text.method.ScrollingMovementMethod;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -27,6 +28,7 @@ public class SearchResultDisplay extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_result_display);
 
+
         final RequestQueue queue = Volley.newRequestQueue(this);
         StringRequest request = getMovieDetails(getIntent().getExtras().getInt("movieId"));
 
@@ -45,7 +47,8 @@ public class SearchResultDisplay extends AppCompatActivity {
                     titleDisplay.setText(this.movie.getString("title") + " - " + this.movie.getString("release_date"));
 
                     TextView overview = (TextView) findViewById(R.id.overview);
-                    overview.setText(this.movie.getString("release_date"));
+                    overview.setMovementMethod(new ScrollingMovementMethod());
+                    overview.setText(this.movie.getString("overview"));
 
                     displayMoviePoster(this.movie.getString("backdrop_path"));
 
@@ -84,6 +87,6 @@ public class SearchResultDisplay extends AppCompatActivity {
     public void displayMoviePoster(String imageCode) {
         String requestUrl = "https://image.tmdb.org/t/p/w500/" + imageCode;
         ImageView moviePicture = (ImageView) findViewById(R.id.movie_picture);
-        Picasso.with(getBaseContext()).load(requestUrl).into(moviePicture);
+        Picasso.with(getBaseContext()).load(requestUrl).resize(1000 ,700).into(moviePicture);
     }
 }
