@@ -113,7 +113,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void spinnerInit(){
         numberOfResultSpinner = (Spinner) findViewById(R.id.spinner);
-        Integer[] listAskedResult = {1, 2 , 3, 4, 5, 6, 7, 8, 9, 10, 20};
+        Integer[] listAskedResult = {1, 5, 10, 20, 30};
         ArrayAdapter<Integer> aa = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, listAskedResult);
         numberOfResultSpinner.setAdapter(aa);
 

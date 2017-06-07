@@ -47,9 +47,10 @@ public class SearchResultDisplay extends AppCompatActivity {
             TextView titleDisplay = (TextView) findViewById(R.id.title_display);
             String title = this.movie.getString("title");
 
-            if (!this.movie.getString("runtime").equals("null")) {
+            if (!this.movie.getString("runtime").equals("null") && (this.movie.getInt("runtime") != 0)) {
                 title += " - " + this.movie.getString("runtime") + "min";
-                }
+            }
+
             if (!this.movie.getString("release_date").equals("null")) {
                 SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
                 Date release = Date.valueOf(this.movie.getString("release_date"));
