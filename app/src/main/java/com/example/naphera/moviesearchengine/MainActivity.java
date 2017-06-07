@@ -103,6 +103,7 @@ public class MainActivity extends AppCompatActivity {
                 // selected item
                 int selectedMovieId = moviesResultsId.get(position);
                 toResultDisplay.putExtra("movieId", selectedMovieId);
+                toResultDisplay.putExtra("language", language);
                 startActivity(toResultDisplay);
             }
         });

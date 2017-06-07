@@ -19,6 +19,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
+import java.sql.Date;
+import java.text.SimpleDateFormat;
+
 public class SearchResultDisplay extends AppCompatActivity {
 
     JSONObject movie = null;
@@ -30,39 +33,44 @@ public class SearchResultDisplay extends AppCompatActivity {
 
 
         final RequestQueue queue = Volley.newRequestQueue(this);
-        StringRequest request = getMovieDetails(getIntent().getExtras().getInt("movieId"));
+        Bundle extras = getIntent().getExtras();
+        StringRequest request = getMovieDetails(extras.getInt("movieId"), extras.getString("language"));
 
         queue.add(request);
 
     }
 
     public void updateTextDisplay() {
-        Bundle extras = getIntent().getExtras();
-        if (extras != null) {
-            getMovieDetails(extras.getInt("movieId"));
-            //getMovieDetails(671);
-            if (this.movie != null) {
-                try {
-                    TextView titleDisplay = (TextView) findViewById(R.id.title_display);
-                    titleDisplay.setText(this.movie.getString("title") + " - " + this.movie.getString("release_date"));
+        try {
+            displayMoviePoster(this.movie.getString("backdrop_path"));
 
-                    TextView overview = (TextView) findViewById(R.id.overview);
-                    overview.setMovementMethod(new ScrollingMovementMethod());
-                    overview.setText(this.movie.getString("overview"));
+            TextView titleDisplay = (TextView) findViewById(R.id.title_display);
+            String title = this.movie.getString("title");
 
-                    displayMoviePoster(this.movie.getString("backdrop_path"));
-
-                } catch (JSONException je) {
-                    final Toast toast = Toast.makeText(getBaseContext(), je.getMessage(), Toast.LENGTH_LONG);
-                    toast.show();
+            if (!this.movie.getString("runtime").equals("null")) {
+                title += " - " + this.movie.getString("runtime") + "min";
                 }
-
+            if (!this.movie.getString("release_date").equals("null")) {
+                SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+                Date release = Date.valueOf(this.movie.getString("release_date"));
+                title += " - " + sdf.format(release);
             }
-        }
+            titleDisplay.setText(title);
+
+            TextView overview = (TextView) findViewById(R.id.overview);
+            overview.setMovementMethod(new ScrollingMovementMethod());
+            if (!this.movie.getString("overview").equals("null")) {
+                overview.setText(this.movie.getString("overview"));
+            }
+
+        } catch (JSONException je) {
+            final Toast toast = Toast.makeText(getBaseContext(), je.getMessage(), Toast.LENGTH_LONG);
+            toast.show();
+            }
     }
 
-    public StringRequest getMovieDetails(int movieId) {
-        String requestUrl = "https://api.themoviedb.org/3/movie/" + movieId + "?api_key=9983b4ca4a856d37618c2d4a52e4a031&language=fr-FR";
+    public StringRequest getMovieDetails(int movieId, String language) {
+        String requestUrl = "https://api.themoviedb.org/3/movie/" + movieId + "?api_key=9983b4ca4a856d37618c2d4a52e4a031&language=" + language;
 
         return new StringRequest(Request.Method.GET, requestUrl,
                 new Response.Listener<String>() {
