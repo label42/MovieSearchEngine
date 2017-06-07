@@ -36,6 +36,9 @@ public class MainActivity extends AppCompatActivity {
     Toast toast;
 
     Spinner numberOfResultSpinner;
+    Spinner languageOfResultSpinner;
+    String language;
+
     List<String> moviesResultsTitle = new ArrayList<>();
     List<Integer> moviesResultsId = new ArrayList<>();
 
@@ -68,6 +71,12 @@ public class MainActivity extends AppCompatActivity {
                 String film= searchField.getText().toString().replace(' ', '+');
                 System.out.print(film);
                 int numberOfResult = Integer.valueOf(String.valueOf(numberOfResultSpinner.getSelectedItem()));
+                language = String.valueOf(languageOfResultSpinner.getSelectedItem());
+                if(language == "Francais"){
+                    language = "fr-FR";
+                } else {
+                    language = "en-US";
+                }
                 StringRequest stringRequest = generateRequest(film, numberOfResult);
                 queue.add(stringRequest);
 
@@ -106,6 +115,11 @@ public class MainActivity extends AppCompatActivity {
         Integer[] listAskedResult = {1, 2 , 3, 4, 5, 6, 7, 8, 9, 10, 20};
         ArrayAdapter<Integer> aa = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, listAskedResult);
         numberOfResultSpinner.setAdapter(aa);
+
+        languageOfResultSpinner = (Spinner) findViewById(R.id.spinnerLanguage);
+        String[] listLanguage = {"Francais", "English"};
+        ArrayAdapter<String> aa2 = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, listLanguage);
+        languageOfResultSpinner.setAdapter(aa2);
     }
 
     public void setResultInList(List<String> listMovie){
@@ -115,7 +129,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public StringRequest generateRequest(String film, final int numberOfResult){
-        String url ="https://api.themoviedb.org/3/search/movie?api_key=9983b4ca4a856d37618c2d4a52e4a031&language=fr-FR&page=1&include_adult=false&query="+film;
+        String url ="https://api.themoviedb.org/3/search/movie?api_key=9983b4ca4a856d37618c2d4a52e4a031&language="+language+"&page=1&include_adult=false&query="+film;
 
         // Request a string response from the provided URL.
         return new StringRequest(Request.Method.GET, url,
