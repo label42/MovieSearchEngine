@@ -41,6 +41,7 @@ public class MainActivity extends AppCompatActivity {
 
     List<String> moviesResultsTitle = new ArrayList<>();
     List<Integer> moviesResultsId = new ArrayList<>();
+    List<JSONObject> jsonObjectsForAdapter;
 
 
     @Override
@@ -123,10 +124,9 @@ public class MainActivity extends AppCompatActivity {
         languageOfResultSpinner.setAdapter(aa2);
     }
 
-    public void setResultInList(List<String> listMovie){
-        ArrayAdapter<String> aa = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1,listMovie);
+    public void setResultInList(List<JSONObject> listMovie){
         ListView lv = (ListView) findViewById(R.id.listResults);
-        lv.setAdapter(aa);
+        lv.setAdapter(new ListAdaptder(this, listMovie));
     }
 
     public StringRequest generateRequest(String film, final int numberOfResult){
@@ -140,6 +140,7 @@ public class MainActivity extends AppCompatActivity {
                         try {
                             moviesResultsTitle = new ArrayList<>();
                             moviesResultsId = new ArrayList<>();
+                            jsonObjectsForAdapter = new ArrayList<>();
 
                             JSONObject repObj =
                                     (JSONObject) new JSONTokener(response).nextValue();
@@ -147,13 +148,14 @@ public class MainActivity extends AppCompatActivity {
                             JSONArray movies = repObj.getJSONArray("results");
                             for (int i=0; i< movies.length();i++) {
                                 JSONObject val = movies.getJSONObject(i);
-                                moviesResultsTitle.add(val.getString("title"));
+                                jsonObjectsForAdapter.add(val);
                                 moviesResultsId.add(val.getInt("id"));
                                 if(i == numberOfResult - 1){
                                     break;
                                 }
                             }
-                            setResultInList(moviesResultsTitle);
+
+                            setResultInList(jsonObjectsForAdapter);
                         } catch (JSONException je) {
                             je.printStackTrace();
                         }
