@@ -73,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
                 System.out.print(film);
                 int numberOfResult = Integer.valueOf(String.valueOf(numberOfResultSpinner.getSelectedItem()));
                 language = String.valueOf(languageOfResultSpinner.getSelectedItem());
-                if(language == "Francais"){
+                if(language.equals("Francais")){
                     language = "fr-FR";
                 } else {
                     language = "en-US";
